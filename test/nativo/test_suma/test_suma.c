@@ -10,6 +10,7 @@ void tearDown(void)
 
 }
 
+// Corresponde al requerimiento de "Sumar dos enteros"
 static void test_debe_sumar_dos_enteros(void)
 {
     {
