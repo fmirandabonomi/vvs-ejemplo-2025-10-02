@@ -3,7 +3,7 @@
 
 /**
  * @brief Suma dos enteros
- * 
+ *
  * @param a Primer entero
  * @param b Segundo entero
  * @return int La suma de a y b
