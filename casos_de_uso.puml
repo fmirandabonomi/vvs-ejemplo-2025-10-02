@@ -3,8 +3,6 @@ left to right direction
 
 :Usuario: as U
 :Broker MQTT: as M <<Servicio>>
-:Luz LED: as L <<Dispositivo>>
-:Servomotor: as S <<Dispositivo>>
 
 (Observar localmente el estado de luz) as OLL
 (Observar localmente la posición de actuador) as OPL
@@ -24,18 +22,9 @@ U --> MLR
 U --> OPR
 U --> MPR
 
-L --> OLL
-S --> OPL
-L --> MLL
-S --> MPL
-L --> OLR
-L --> MLR
-S --> OPR
-S --> MPR
-
-M --> OLR
-M --> MLR
-M --> OPR
-M --> MPR
+OLR --> M
+MLR --> M
+OPR --> M
+MPR --> M
 
 @enduml
