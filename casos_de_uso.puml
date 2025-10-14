@@ -1,0 +1,41 @@
+@startuml
+left to right direction
+
+:Usuario: as U
+:Broker MQTT: as M <<Servicio>>
+:Luz LED: as L <<Dispositivo>>
+:Servomotor: as S <<Dispositivo>>
+
+(Observar localmente el estado de luz) as OLL
+(Observar localmente la posición de actuador) as OPL
+(Modificar localmente el estado de luz) as MLL
+(Modificar localmente la posición de actuador) as MPL
+(Observar estado de luz remota) as OLR
+(Modificar estado de luz remota) as MLR
+(Observar posición de actuador remoto) as OPR
+(Modificar posición de actuador remoto) as MPR
+
+U --> OLL
+U --> OPL
+U --> MLL
+U --> MPL
+U --> OLR
+U --> MLR
+U --> OPR
+U --> MPR
+
+L --> OLL
+S --> OPL
+L --> MLL
+S --> MPL
+L --> OLR
+L --> MLR
+S --> OPR
+S --> MPR
+
+M --> OLR
+M --> MLR
+M --> OPR
+M --> MPR
+
+@enduml
