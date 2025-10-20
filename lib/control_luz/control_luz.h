@@ -7,7 +7,11 @@ struct ControlLuz
     void encenderLuz();
     void apagarLuz();
 
+    ControlLuz(void (*callbackActivaLuz)(), void (*callbackDesactivaLuz)());
+
 private:
     bool estadoLuz = false;
+    void (*const callbackActivaLuz)();
+    void (*const callbackDesactivaLuz)();
 };
 #endif
