@@ -1,18 +1,27 @@
+#include "control_luz.h"
 #include <Arduino.h>
 
-// put function declarations here:
-int myFunction(int, int);
+static ControlLuz *miControl;
 
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+static void enciendeLed()
+{
+    digitalWrite(9, HIGH);
+}
+static void apagaLed()
+{
+    digitalWrite(9, LOW);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void setup()
+{
+    miControl = new ControlLuz(enciendeLed, apagaLed);
+    while (!miControl)
+        continue;
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+void loop()
+{
+    // put your main code here, to run repeatedly:
+    miControl->encenderLuz();
+    delay(100);
 }

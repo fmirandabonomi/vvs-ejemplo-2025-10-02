@@ -3,9 +3,21 @@
 
 static ControlLuz *controlador;
 
+static bool luz;
+
+static void enciende()
+{
+    luz = true;
+}
+static void apaga()
+{
+    luz = false;
+}
+
 void setUp()
 {
-    controlador = new ControlLuz();
+    luz = true;
+    controlador = new ControlLuz(enciende, apaga);
 }
 void tearDown()
 {
@@ -17,12 +29,14 @@ void tearDown()
 static void test_el_estado_inicial_de_la_luz_es_apagado()
 {
     TEST_ASSERT_FALSE(controlador->getEstadoLuz());
+    TEST_ASSERT_FALSE(luz);
 }
 
 static void test_debe_poder_encenderse_la_luz()
 {
     controlador->encenderLuz();
     TEST_ASSERT_TRUE(controlador->getEstadoLuz());
+    TEST_ASSERT_TRUE(luz);
 }
 
 static void test_debe_poder_apagarse_la_luz()
@@ -30,9 +44,10 @@ static void test_debe_poder_apagarse_la_luz()
     controlador->encenderLuz();
     controlador->apagarLuz();
     TEST_ASSERT_FALSE(controlador->getEstadoLuz());
+    TEST_ASSERT_FALSE(luz);
 }
 
-int main(void)
+int main()
 {
     UNITY_BEGIN();
     RUN_TEST(test_el_estado_inicial_de_la_luz_es_apagado);
