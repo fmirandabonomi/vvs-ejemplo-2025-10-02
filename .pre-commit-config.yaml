@@ -10,3 +10,10 @@ repos:
   rev: v1.3.5
   hooks:
   - id: clang-format
+- repo: local
+  hooks:
+  - id: platformio-cppcheck
+    name: PlatformIO Cppcheck
+    entry: pio check -e nativo --src-filters="+<lib/**>" --flags "--suppress=unusedFunction --addon=misra.py" --fail-on-defect=high
+    language: system
+    pass_filenames: false

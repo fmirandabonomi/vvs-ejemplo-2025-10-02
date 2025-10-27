@@ -1,4 +1,4 @@
-#include "control_luz.h"
+#include "control_luz.hpp"
 
 bool ControlLuz::getEstadoLuz()
 {
@@ -15,12 +15,4 @@ void ControlLuz::apagarLuz()
 {
     this->estadoLuz = false;
     this->callbackDesactivaLuz();
-}
-
-ControlLuz::ControlLuz(void (*callbackActivaLuz)(), void (*callbackDesactivaLuz)()) : callbackActivaLuz(callbackActivaLuz), callbackDesactivaLuz(callbackDesactivaLuz)
-{
-    while (!callbackActivaLuz || !callbackDesactivaLuz)
-        continue;
-
-    this->apagarLuz();
 }

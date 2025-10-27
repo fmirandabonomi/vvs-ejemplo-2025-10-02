@@ -1,4 +1,5 @@
 {
     "editor.formatOnSave": true,
-    "C_Cpp.codeAnalysis.clangTidy.enabled": true
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+    "cppcheck-lite.enable": true
 }

@@ -1,4 +1,4 @@
-#include "control_luz.h"
+#include "control_luz.hpp"
 #include "unity.h"
 
 static ControlLuz *controlador;
