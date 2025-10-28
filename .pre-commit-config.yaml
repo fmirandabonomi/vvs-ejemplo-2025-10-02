@@ -14,6 +14,6 @@ repos:
   hooks:
   - id: platformio-cppcheck
     name: PlatformIO Cppcheck
-    entry: pio check -e nativo --src-filters="+<lib/**>" --flags "--suppress=unusedFunction --addon=misra.py" --fail-on-defect=high
+    entry: pio check -e nativo --fail-on-defect=high --fail-on-defect=medium --fail-on-defect=low
     language: system
     pass_filenames: false

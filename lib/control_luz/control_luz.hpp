@@ -7,14 +7,7 @@ struct ControlLuz
     void encenderLuz();
     void apagarLuz();
 
-    ControlLuz(void (*callbackActivaLuz)(), void (*callbackDesactivaLuz)())
-        : callbackActivaLuz(callbackActivaLuz), callbackDesactivaLuz(callbackDesactivaLuz)
-    {
-        while (!callbackActivaLuz || !callbackDesactivaLuz)
-            ;
-
-        this->apagarLuz();
-    }
+    ControlLuz(void (*callbackActivaLuz)(), void (*callbackDesactivaLuz)());
     ControlLuz() = delete;
 
 private:

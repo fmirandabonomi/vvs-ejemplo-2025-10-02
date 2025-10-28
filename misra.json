@@ -1,0 +1,7 @@
+{
+    "script": "misra.py",
+    "args": [
+        "--rule-texts=misra_c_2012__headlines_for_cppcheck-AMD1+AMD2.txt"
+    ],
+    "ctu": true
+}
