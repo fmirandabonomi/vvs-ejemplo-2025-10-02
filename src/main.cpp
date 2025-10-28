@@ -11,6 +11,7 @@
 #define HTTP_REDIRECT 302
 #define HTTP_NOT_FOUND 404
 #define ESPERA_LAZO_MS 10
+#define PUERTO_WEB 80
 
 #define LOG(...) Serial.printf(__VA_ARGS__)
 
@@ -25,7 +26,7 @@ static ControlLuz miControl(enciendeLed, apagaLed);
 
 static void eventoWiFi(WiFiEvent_t evento);
 
-static WebServer servidorWeb(80);
+static WebServer servidorWeb(PUERTO_WEB);
 
 static void atiendeRaiz()
 {
@@ -69,6 +70,8 @@ void setup()
     servidorWeb.on("/encender", atiendeEncender);
     servidorWeb.on("/apagar", atiendeApagar);
     servidorWeb.onNotFound(atiendeNotFound);
+    servidorWeb.begin(PUERTO_WEB);
+    pinMode(PIN_LED, OUTPUT);
 }
 
 void loop()
