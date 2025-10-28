@@ -7,7 +7,7 @@ struct ControlLuz
     void encenderLuz();
     void apagarLuz();
 
-    ControlLuz(void (*callbackActivaLuz)(), void (*callbackDesactivaLuz)());
+    ControlLuz(void (*callbackActivaLuz)(), void (*callbackDesactivaLuz)()) noexcept;
     ControlLuz() = delete;
 
 private:

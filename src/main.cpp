@@ -1,10 +1,81 @@
 #include "control_luz.hpp"
 #include <Arduino.h>
+//
+#include <ESPmDNS.h>
+#include <WebServer.h>
+#include <WiFi.h>
 
-#define PERIODO_PARPADEO_MS 200
-#define PIN_LED 9
+#define PIN_LED LED_BUILTIN
 
-static ControlLuz *miControl;
+#define HTTP_OK 200
+#define HTTP_REDIRECT 302
+#define HTTP_NOT_FOUND 404
+#define ESPERA_LAZO_MS 10
+
+#define LOG(...) Serial.printf(__VA_ARGS__)
+
+const char *ssid = "UNT";
+const char *password = "wifi.unt";
+
+const char *dispositivo = "spot_fer";
+
+static void enciendeLed();
+static void apagaLed();
+static ControlLuz miControl(enciendeLed, apagaLed);
+
+static void eventoWiFi(WiFiEvent_t evento);
+
+static WebServer servidorWeb(80);
+
+static void atiendeRaiz()
+{
+    static const String paginaEncabezado = "<html><head><title>Control de Luz</title></head><body><h1>Control de Luz</h1>";
+    static const String paginaEstadoOn = "<p>La luz está <strong>ENCENDIDA</strong>.</p>";
+    static const String paginaEstadoOff = "<p>La luz está <strong>APAGADA</strong>.</p>";
+    static const String paginaPie = "<p>Use /encender para encender la luz y /apagar para apagarla.</p></body></html>";
+    String mensaje = paginaEncabezado + (miControl.getEstadoLuz() ? paginaEstadoOn : paginaEstadoOff) + paginaPie;
+    servidorWeb.send(HTTP_OK, "text/html", mensaje);
+}
+
+static void redirigeRaiz()
+{
+    servidorWeb.sendHeader("Location", "/");
+    servidorWeb.send(HTTP_REDIRECT, "text/plain", "");
+}
+
+static void atiendeEncender()
+{
+    miControl.encenderLuz();
+    redirigeRaiz();
+}
+static void atiendeApagar()
+{
+    miControl.apagarLuz();
+    redirigeRaiz();
+}
+
+static void atiendeNotFound()
+{
+    servidorWeb.send(HTTP_NOT_FOUND, "text/plain", "Recurso no encontrado");
+}
+
+void setup()
+{
+    Serial.begin(115200);
+    WiFi.mode(WIFI_STA);
+    WiFi.onEvent(eventoWiFi);
+    WiFi.begin(ssid, password);
+    servidorWeb.on("/", atiendeRaiz);
+    servidorWeb.on("/encender", atiendeEncender);
+    servidorWeb.on("/apagar", atiendeApagar);
+    servidorWeb.onNotFound(atiendeNotFound);
+}
+
+void loop()
+{
+    servidorWeb.handleClient();
+    delay(ESPERA_LAZO_MS);
+}
 
 static void enciendeLed()
 {
@@ -15,17 +86,33 @@ static void apagaLed()
     digitalWrite(PIN_LED, LOW);
 }
 
-void setup()
+static void eventoWiFi(WiFiEvent_t evento)
 {
-    miControl = new ControlLuz(enciendeLed, apagaLed);
-    while (!(bool)miControl)
-    { // Lazo infinito en caso de error de memoria.
+    switch (evento)
+    {
+    case ARDUINO_EVENT_WIFI_STA_CONNECTED:
+        LOG("Conectado a la red WiFi\n");
+        break;
+    case ARDUINO_EVENT_WIFI_STA_GOT_IP:
+        LOG("Obtenida IP: %s\n", WiFi.localIP().toString().c_str());
+        if (MDNS.begin(dispositivo)) // NOLINT(bugprone-branch-clone) ; Los efectos de las ramas son distintos
+        {
+            LOG("MDNS iniciado con exito\n");
+        }
+        else
+        {
+            LOG("Error al iniciar MDNS\n");
+        }
+        break;
+    case ARDUINO_EVENT_WIFI_STA_DISCONNECTED:
+        LOG("Desconectado de la red WiFi\n");
+        break;
+    case ARDUINO_EVENT_WIFI_STA_LOST_IP:
+        LOG("Se perdió la IP\n");
+        MDNS.end();
+        LOG("MDNS finalizado\n");
+        break;
+    default:
+        break;
     }
-}
-
-void loop()
-{
-    // put your main code here, to run repeatedly:
-    miControl->encenderLuz();
-    delay(PERIODO_PARPADEO_MS / 2);
 }
