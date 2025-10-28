@@ -3,7 +3,7 @@
 
 struct ControlLuz
 {
-    bool getEstadoLuz();
+    bool getEstadoLuz() const;
     void encenderLuz();
     void apagarLuz();
 
@@ -11,8 +11,8 @@ struct ControlLuz
     ControlLuz() = delete;
 
 private:
-    bool estadoLuz = false;
     void (*const callbackActivaLuz)();
     void (*const callbackDesactivaLuz)();
+    bool estadoLuz = false;
 };
 #endif

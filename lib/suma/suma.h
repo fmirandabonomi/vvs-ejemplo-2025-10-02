@@ -8,6 +8,6 @@
  * @param b Segundo entero
  * @return int La suma de a y b
  */
-int suma(int a, int b);
+int suma(int a, int b); // NOLINT(readability-identifier-length)
 
 #endif

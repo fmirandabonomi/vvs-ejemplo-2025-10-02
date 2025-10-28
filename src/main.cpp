@@ -1,5 +1,8 @@
 #include "control_luz.hpp"
 #include <Arduino.h>
+#include <assert.h>
+
+#define PERIODO_PARPADEO_MS 200
 
 static ControlLuz *miControl;
 
@@ -12,18 +15,15 @@ static void apagaLed()
     digitalWrite(9, LOW);
 }
 
-// cppcheck-suppress unusedFunction ; Es llamada desde el main de arduino
 void setup()
 {
     miControl = new ControlLuz(enciendeLed, apagaLed);
-    while (!miControl)
-        ;
+    assert(miControl);
 }
 
-// cppcheck-suppress unusedFunction ; Es llamada desde el main de arduino
 void loop()
 {
     // put your main code here, to run repeatedly:
     miControl->encenderLuz();
-    delay(100);
+    delay(PERIODO_PARPADEO_MS / 2);
 }
