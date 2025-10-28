@@ -1,9 +1,22 @@
 @startuml
 left to right direction
 
-:Usuario: as U
+actor Usuario as U
 
-U --> Controla estado de luz
-U --> Controla posición de luz
+actor "Luz LED" as luz <<artefacto>>
+actor "Servo Dirección" as servo <<artefacto>>
+
+package "Spot WiFi"{
+    usecase "UC1. Observa estado del spot" as C1
+    usecase "UC2. Enciende/apaga luz" as C2
+    usecase "UC3. Modifica dirección spot" as C3
+}
+
+U --> C1
+U --> C2
+U --> C3
+
+C2 --> luz
+C3 --> servo
 
 @enduml
