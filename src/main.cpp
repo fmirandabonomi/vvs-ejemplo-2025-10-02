@@ -1,24 +1,26 @@
 #include "control_luz.hpp"
 #include <Arduino.h>
-#include <assert.h>
 
 #define PERIODO_PARPADEO_MS 200
+#define PIN_LED 9
 
 static ControlLuz *miControl;
 
 static void enciendeLed()
 {
-    digitalWrite(9, HIGH);
+    digitalWrite(PIN_LED, HIGH);
 }
 static void apagaLed()
 {
-    digitalWrite(9, LOW);
+    digitalWrite(PIN_LED, LOW);
 }
 
 void setup()
 {
     miControl = new ControlLuz(enciendeLed, apagaLed);
-    assert(miControl);
+    while (!(bool)miControl)
+    { // Lazo infinito en caso de error de memoria.
+    }
 }
 
 void loop()
