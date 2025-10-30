@@ -31,12 +31,19 @@ static WebServer servidorWeb(PUERTO_WEB);
 static void atiendeRaiz()
 {
     static const String paginaEncabezado = "<html><head><title>Control de Luz</title></head><body><h1>Control de Luz</h1>";
-    static const String id_pre = "<p>Dispositivo: ";
-    static const String id_post = "</p><hr>";
+    static const String idPre = "<p>Dispositivo: ";
+    static const String idPost = "</p><hr>";
     static const String paginaEstadoOn = "<p>La luz est&aacute; <strong>ENCENDIDA</strong>. <a href=\"comando?luz=apagar\">Apagar</a></p>";
     static const String paginaEstadoOff = "<p>La luz est&aacute; <strong>APAGADA</strong>. <a href=\"comando?luz=encender\">Encender</a><br></p>";
+    static const String direccionPre = "<hr><p>La direcci&oacute;n actural es <strong>";
+    static const String direccionPost = " grados</strong></p><br><form action=\"/comando\" method=\"get\">\
+    <label for=\"angle\">Nueva direcci&oacute;n (grados):</label>\
+    <input type=\"number\" id=\"direccion\" name=\"direccion\" min=\"-90\" max=\"90\" step=\"1\" required>\
+    <br><br>\
+    <input type=\"submit\" value=\"Modificar direcci&oacute;n\">\
+    </form>";
     static const String paginaPie = "<hr></body></html>";
-    String mensaje = paginaEncabezado + id_pre + dispositivo + id_post + (miControl.getEstadoLuz() ? paginaEstadoOn : paginaEstadoOff) + paginaPie;
+    String mensaje = paginaEncabezado + idPre + dispositivo + idPost + (miControl.getEstadoLuz() ? paginaEstadoOn : paginaEstadoOff) + direccionPre + String(0) + direccionPost + paginaPie;
     servidorWeb.send(HTTP_OK, "text/html", mensaje);
 }
 
@@ -50,6 +57,7 @@ static void atiendeComando()
 {
 
     String luz = servidorWeb.arg("luz");
+    String direccion = servidorWeb.arg("direccion");
     if (luz == "encender")
     {
         miControl.encenderLuz();
@@ -57,6 +65,10 @@ static void atiendeComando()
     else if (luz == "apagar")
     {
         miControl.apagarLuz();
+    }
+    if (direccion != "")
+    {
+        LOG("Direccion %s\n", direccion.c_str());
     }
     redirigeRaiz();
 }

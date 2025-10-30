@@ -32,13 +32,16 @@ static void test_el_estado_inicial_de_la_luz_es_apagado()
     TEST_ASSERT_FALSE(luz);
 }
 
+// Encender la luz corresponde a UC2
+// Verificar su estado encendido corresponde a UC1
 static void test_debe_poder_encenderse_la_luz()
 {
     controlador->encenderLuz();
     TEST_ASSERT_TRUE(controlador->getEstadoLuz());
     TEST_ASSERT_TRUE(luz);
 }
-
+// Apagar la luz corresponde a UC2
+// Verificar su estado apagado corresponde a UC1
 static void test_debe_poder_apagarse_la_luz()
 {
     controlador->encenderLuz();
