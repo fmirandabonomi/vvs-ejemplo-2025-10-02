@@ -33,8 +33,8 @@ static void atiendeRaiz()
     static const String paginaEncabezado = "<html><head><title>Control de Luz</title></head><body><h1>Control de Luz</h1>";
     static const String id_pre = "<p>Dispositivo: ";
     static const String id_post = "</p><hr>";
-    static const String paginaEstadoOn = "<p>La luz est&aacute; <strong>ENCENDIDA</strong>. <a href=\"apagar\">Apagar</a></p>";
-    static const String paginaEstadoOff = "<p>La luz est&aacute; <strong>APAGADA</strong>. <a href=\"encender\">Encender</a><br></p>";
+    static const String paginaEstadoOn = "<p>La luz est&aacute; <strong>ENCENDIDA</strong>. <a href=\"comando?luz=apagar\">Apagar</a></p>";
+    static const String paginaEstadoOff = "<p>La luz est&aacute; <strong>APAGADA</strong>. <a href=\"comando?luz=encender\">Encender</a><br></p>";
     static const String paginaPie = "<hr></body></html>";
     String mensaje = paginaEncabezado + id_pre + dispositivo + id_post + (miControl.getEstadoLuz() ? paginaEstadoOn : paginaEstadoOff) + paginaPie;
     servidorWeb.send(HTTP_OK, "text/html", mensaje);
@@ -46,14 +46,18 @@ static void redirigeRaiz()
     servidorWeb.send(HTTP_REDIRECT, "text/plain", "");
 }
 
-static void atiendeEncender()
+static void atiendeComando()
 {
-    miControl.encenderLuz();
-    redirigeRaiz();
-}
-static void atiendeApagar()
-{
-    miControl.apagarLuz();
+
+    String luz = servidorWeb.arg("luz");
+    if (luz == "encender")
+    {
+        miControl.encenderLuz();
+    }
+    else if (luz == "apagar")
+    {
+        miControl.apagarLuz();
+    }
     redirigeRaiz();
 }
 
@@ -69,8 +73,7 @@ void setup()
     WiFi.onEvent(eventoWiFi);
     WiFi.begin(ssid, password);
     servidorWeb.on("/", atiendeRaiz);
-    servidorWeb.on("/encender", atiendeEncender);
-    servidorWeb.on("/apagar", atiendeApagar);
+    servidorWeb.on("/comando", atiendeComando);
     servidorWeb.onNotFound(atiendeNotFound);
     servidorWeb.begin(PUERTO_WEB);
     pinMode(PIN_LED, OUTPUT);
