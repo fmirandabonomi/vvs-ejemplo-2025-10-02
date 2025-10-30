@@ -31,10 +31,12 @@ static WebServer servidorWeb(PUERTO_WEB);
 static void atiendeRaiz()
 {
     static const String paginaEncabezado = "<html><head><title>Control de Luz</title></head><body><h1>Control de Luz</h1>";
-    static const String paginaEstadoOn = "<p>La luz está <strong>ENCENDIDA</strong>.</p>";
-    static const String paginaEstadoOff = "<p>La luz está <strong>APAGADA</strong>.</p>";
-    static const String paginaPie = "<p>Use /encender para encender la luz y /apagar para apagarla.</p></body></html>";
-    String mensaje = paginaEncabezado + (miControl.getEstadoLuz() ? paginaEstadoOn : paginaEstadoOff) + paginaPie;
+    static const String id_pre = "<p>Dispositivo: ";
+    static const String id_post = "</p><hr>";
+    static const String paginaEstadoOn = "<p>La luz est&aacute; <strong>ENCENDIDA</strong>. <a href=\"apagar\">Apagar</a></p>";
+    static const String paginaEstadoOff = "<p>La luz est&aacute; <strong>APAGADA</strong>. <a href=\"encender\">Encender</a><br></p>";
+    static const String paginaPie = "<hr></body></html>";
+    String mensaje = paginaEncabezado + id_pre + dispositivo + id_post + (miControl.getEstadoLuz() ? paginaEstadoOn : paginaEstadoOff) + paginaPie;
     servidorWeb.send(HTTP_OK, "text/html", mensaje);
 }
 
